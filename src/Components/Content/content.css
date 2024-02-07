@@ -1,0 +1,27 @@
+.content {
+  display: block;
+  border-radius: 6px;
+  max-height: 3000px;
+  border: 2px solid white;
+  background-color: #e6e6e6;
+  position: relative;
+  top: 140px;
+  padding: 12px 12px;
+  color: black;
+  font-family: "Work Sans", sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  /* margin-bottom: 150px; */
+}
+
+.copy-btn {
+  text-align: right;
+}
+
+.copy-btn button {
+  background-color: black;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
