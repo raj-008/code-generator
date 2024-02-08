@@ -13,8 +13,8 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 
-const pages = ["How it Works", "Created by Raj Shingala"];
-const info = ["Created by Raj Shingala"];
+const pages = ["Created by Raj Shingala"];
+// const info = [""];
 
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -105,19 +105,19 @@ function Header() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Button key={page} onClick={handleCloseNavMenu} sx={{ my: 2, color: "white", display: "block", display: page == "Created by Raj Shingala" ? { xs: "flex", md: "none" } : "" }}>
-                {page}
-              </Button>
-            ))}
-          </Box>
-
-          <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
-            {info.map((page) => (
               <Button key={page} onClick={handleCloseNavMenu} sx={{ my: 2, color: "white", display: "block" }}>
                 {page}
               </Button>
             ))}
           </Box>
+
+          {/* <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+            {info.map((page) => (
+              <Button key={page} onClick={handleCloseNavMenu} sx={{ my: 2, color: "white", display: "block" }}>
+                {page}
+              </Button>
+            ))}
+          </Box> */}
         </Toolbar>
       </Container>
     </AppBar>
