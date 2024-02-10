@@ -54,7 +54,7 @@ const Form = () => {
   const generateEdit = () => {
     let resultString = "function edit($id){\n\n";
     resultString += "  $data = Modal::find($id)->all();\n\n";
-    resultString += "  return view(route('ROUTE_NAME',compact('data)));\n";
+    resultString += "  return view(route('ROUTE_NAME', compact('data)));\n";
     resultString += "}\n";
     setEdit(resultString);
   };
@@ -64,7 +64,7 @@ const Form = () => {
   const generateDelete = () => {
     let resultString = "function delete($id){\n\n";
     resultString += "  $data = Modal::find($id)->delete();\n\n";
-    resultString += "  return view(route('ROUTE_NAME',compact('data)));\n";
+    resultString += "  return view(route('ROUTE_NAME', compact('data)));\n";
     resultString += "}\n";
     setDelete(resultString);
   };
