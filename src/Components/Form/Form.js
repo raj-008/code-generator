@@ -1,20 +1,22 @@
 import React from "react";
 import "./form.css";
 import Button from "@mui/material/Button";
-import { useState, createContext } from "react";
+import { useState } from "react";
 import Content from "../Content/Content";
 
 const Form = () => {
+  const [formInput, setFormInput] = useState([]);
+
   const [value, setValue] = useState([]);
 
   const setNewValue = (event) => {
+    setFormInput([]);
+    setValue([]);
     const formInput = event.currentTarget.value;
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = formInput;
     const inputElements = tempDiv.querySelectorAll("input, textarea,select");
-    inputElements.forEach(function (inputTag) {
-      value.push(inputTag.name);
-    });
+    setFormInput(inputElements);
   };
 
   const [storeOutput, setStore] = useState();
@@ -25,7 +27,7 @@ const Form = () => {
     resultString += "  Modal::store([\n";
     value.forEach((newValue, index) => {
       if (newValue != "") resultString += `   '${newValue}' => $${newValue}`;
-      if (index < value.length - 2) {
+      if (index < value.length - 1) {
         resultString += ",\n";
       }
     });
@@ -40,8 +42,8 @@ const Form = () => {
     resultString += "\n $input = $request->all();\n\n";
     resultString += "  Modal::update([\n";
     value.forEach((newValue, index) => {
-      if (newValue != "") resultString += `   '${newValue}' => $${newValue}`;
-      if (index < value.length - 2) {
+      if (newValue != "") resultString += `'${newValue}' => $${newValue}`;
+      if (index < value.length - 1) {
         resultString += ",\n";
       }
     });
@@ -68,8 +70,24 @@ const Form = () => {
     resultString += "}\n";
     setDelete(resultString);
   };
-
   const callfunctions = () => {
+    if (!formInput.length) {
+      setValue([]);
+      setStore("");
+    }
+
+    formInput.forEach(function (inputTag) {
+      let inputName = inputTag.name.trim();
+      inputName = inputName.split(" ").join("_");
+
+      if (!value.includes(inputName)) value.push(inputName);
+    });
+
+    if (!value.length) {
+      alert("😣 aww, There is no input field in your html form !");
+      return false;
+    }
+
     generateStore();
     generateUpdate();
     generateEdit();
