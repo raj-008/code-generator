@@ -3,9 +3,45 @@ import "./form.css";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import Content from "../Content/Content";
+import TextField from "@mui/material/TextField";
+import { styled } from "@mui/material/styles";
+import { snakeToCamelCase } from "../../helpers";
+
+const DarkTextField = styled(TextField)({
+  "& label.Mui-focused": {
+    color: "black",
+  },
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "black",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "lightgrey",
+    },
+    "&:hover fieldset": {
+      borderColor: "black",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "black",
+    },
+  },
+});
 
 const Form = () => {
   const [formInput, setFormInput] = useState([]);
+  const [modalName, setModalName] = useState("Modal");
+
+  const setModal = (e) => {
+    let modalName = e.target.value;
+
+    setModalName(() => {
+      if (modalName.length) {
+        return modalName[0].toUpperCase() + modalName.slice(1);
+      }
+
+      return modalName;
+    });
+  };
 
   const [value, setValue] = useState([]);
 
@@ -24,9 +60,9 @@ const Form = () => {
   const generateStore = () => {
     let resultString = "function store(Request $request){\n";
     resultString += "\n $input = $request->all();\n\n";
-    resultString += "  Modal::store([\n";
+    resultString += " " + modalName + "::store([\n";
     value.forEach((newValue, index) => {
-      if (newValue != "") resultString += `   '${newValue}' => $${newValue}`;
+      if (newValue != "") resultString += `   '${newValue}' => $${snakeToCamelCase(newValue)}`;
       if (index < value.length - 1) {
         resultString += ",\n";
       }
@@ -40,9 +76,9 @@ const Form = () => {
   const generateUpdate = () => {
     let resultString = "function update(Request $request){\n";
     resultString += "\n $input = $request->all();\n\n";
-    resultString += "  Modal::update([\n";
+    resultString += " " + modalName + "::update([\n";
     value.forEach((newValue, index) => {
-      if (newValue != "") resultString += `'${newValue}' => $${newValue}`;
+      if (newValue != "") resultString += `  '${newValue}' => $${snakeToCamelCase(newValue)}`;
       if (index < value.length - 1) {
         resultString += ",\n";
       }
@@ -55,7 +91,7 @@ const Form = () => {
 
   const generateEdit = () => {
     let resultString = "function edit($id){\n\n";
-    resultString += "  $data = Modal::find($id)->all();\n\n";
+    resultString += "  $data = " + modalName + "::find($id)->all();\n\n";
     resultString += "  return view(route('ROUTE_NAME', compact('data)));\n";
     resultString += "}\n";
     setEdit(resultString);
@@ -65,7 +101,7 @@ const Form = () => {
 
   const generateDelete = () => {
     let resultString = "function delete($id){\n\n";
-    resultString += "  $data = Modal::find($id)->delete();\n\n";
+    resultString += "  $data = " + modalName + "::find($id)->delete();\n\n";
     resultString += "  return view(route('ROUTE_NAME', compact('data)));\n";
     resultString += "}\n";
     setDelete(resultString);
@@ -77,7 +113,7 @@ const Form = () => {
     }
 
     formInput.forEach(function (inputTag) {
-      let inputName = inputTag.name.trim();
+      let inputName = inputTag.name.length ? inputTag.name.trim() : inputTag.id.trim();
       inputName = inputName.split(" ").join("_");
 
       if (!value.includes(inputName)) value.push(inputName);
@@ -97,7 +133,8 @@ const Form = () => {
   return (
     <>
       <div className="form">
-        <textarea name="formInput" id="formInput" onChange={setNewValue} className="form-input" cols={200} placeholder="Upload an HTML form & simply click on generate"></textarea>
+        <DarkTextField id="modelName" name="modal_name" label="Modal Name" variant="outlined" sx={{ mb: 2 }} onChange={setModal} defaultValue={modalName != "Modal" ? modalName : ""} />
+        <textarea name="formInput" id="formInput" onChange={setNewValue} className="form-input" cols={200} placeholder="Type HTML form inputs & simply click on generate"></textarea>
         <div className="generate">
           <Button variant="contained" className="generate-btn" onClick={callfunctions}>
             Generate
